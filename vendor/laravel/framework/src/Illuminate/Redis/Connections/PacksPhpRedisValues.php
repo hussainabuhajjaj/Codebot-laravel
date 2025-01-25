@@ -83,17 +83,6 @@ trait PacksPhpRedisValues
     }
 
     /**
-     * Determine if serialization is enabled.
-     *
-     * @return bool
-     */
-    public function serialized(): bool
-    {
-        return defined('Redis::OPT_SERIALIZER') &&
-               $this->client->getOption(Redis::OPT_SERIALIZER) !== Redis::SERIALIZER_NONE;
-    }
-
-    /**
      * Determine if compression is enabled.
      *
      * @return bool

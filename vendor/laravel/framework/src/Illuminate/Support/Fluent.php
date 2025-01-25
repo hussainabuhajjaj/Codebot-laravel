@@ -5,7 +5,6 @@ namespace Illuminate\Support;
 use ArrayAccess;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Support\Traits\InteractsWithData;
 use JsonSerializable;
 
 /**
@@ -17,8 +16,6 @@ use JsonSerializable;
  */
 class Fluent implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
 {
-    use InteractsWithData;
-
     /**
      * All of the attributes set on the fluent instance.
      *
@@ -40,7 +37,7 @@ class Fluent implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
     }
 
     /**
-     * Get an attribute from the fluent instance using "dot" notation.
+     * Get an attribute from the fluent instance.
      *
      * @template TGetDefault
      *
@@ -50,86 +47,11 @@ class Fluent implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
      */
     public function get($key, $default = null)
     {
-        return data_get($this->attributes, $key, $default);
-    }
-
-    /**
-     * Set an attribute on the fluent instance using "dot" notation.
-     *
-     * @param  TKey  $key
-     * @param  TValue  $value
-     * @return $this
-     */
-    public function set($key, $value)
-    {
-        data_set($this->attributes, $key, $value);
-
-        return $this;
-    }
-
-    /**
-     * Get an attribute from the fluent instance.
-     *
-     * @param  string  $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    public function value($key, $default = null)
-    {
         if (array_key_exists($key, $this->attributes)) {
             return $this->attributes[$key];
         }
 
         return value($default);
-    }
-
-    /**
-     * Get the value of the given key as a new Fluent instance.
-     *
-     * @param  string  $key
-     * @param  mixed  $default
-     * @return static
-     */
-    public function scope($key, $default = null)
-    {
-        return new static(
-            (array) $this->get($key, $default)
-        );
-    }
-
-    /**
-     * Get all of the attributes from the fluent instance.
-     *
-     * @param  array|mixed|null  $keys
-     * @return array
-     */
-    public function all($keys = null)
-    {
-        $data = $this->data();
-
-        if (! $keys) {
-            return $data;
-        }
-
-        $results = [];
-
-        foreach (is_array($keys) ? $keys : func_get_args() as $key) {
-            Arr::set($results, $key, Arr::get($data, $key));
-        }
-
-        return $results;
-    }
-
-    /**
-     * Get data from the fluent instance.
-     *
-     * @param  string  $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    protected function data($key = null, $default = null)
-    {
-        return $this->get($key, $default);
     }
 
     /**
@@ -192,7 +114,7 @@ class Fluent implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
      */
     public function offsetGet($offset): mixed
     {
-        return $this->value($offset);
+        return $this->get($offset);
     }
 
     /**
@@ -240,7 +162,7 @@ class Fluent implements Arrayable, ArrayAccess, Jsonable, JsonSerializable
      */
     public function __get($key)
     {
-        return $this->value($key);
+        return $this->get($key);
     }
 
     /**
