@@ -1,0 +1,20 @@
+{
+    "name": "hussainabuhajjaj/codebot",
+    "description": "A friendly bot that generates code for you",
+    "type": "library",
+    "require": {
+        "laravel/framework": "^11.40"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Hussainabuhajjaj\\Codebot\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hussain Abuhajajj"
+        }
+    ],
+    "minimum-stability": "stable"
+}
