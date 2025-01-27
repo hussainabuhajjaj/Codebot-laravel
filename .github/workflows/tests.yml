@@ -1,0 +1,39 @@
+name: Package Tests
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        php: ["8.1", "8.2", "8.3"]
+        laravel: ["9", "10", "11"]
+        include:
+          - laravel: "9"
+            testbench: "6.*"
+          - laravel: "10"
+            testbench: "7.*"
+          - laravel: "11"
+            testbench: "8.*"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, xml, ctype, json
+          coverage: pcov
+
+      - name: Install Dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}.*" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer update --prefer-dist --no-interaction
+
+      - name: Run Pest Tests
+        run: vendor/bin/pest

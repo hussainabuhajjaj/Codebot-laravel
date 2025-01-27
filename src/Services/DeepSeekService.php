@@ -1,33 +1,30 @@
 <?php
 
-   namespace Hussainabuhajjaj\Codebot\Services;
+namespace Hussainabuhajjaj\Codebot\Services;
 
-   use GuzzleHttp\Client;
+use GuzzleHttp\Client;
 
-   class DeepSeekService
-   {
-       protected $client;
-       protected $apiKey;
+class DeepSeekService
+{
+    protected Client $client;
 
-       public function __construct()
-       {
-           $this->client = new Client([
-               'base_uri' => 'https://api.deepseek.com/v1/',
-               'headers' => [
-                   'Authorization' => 'Bearer ' . config('codebot.deepseek_api_key'),
-                   'Content-Type' => 'application/json',
-               ],
-           ]);
-       }
+    public function __construct()
+    {
+        $this->client = new Client([
+            'base_uri' => config('codebot.deepseek_endpoint'),
+            'headers' => [
+                'Authorization' => 'Bearer '.config('codebot.deepseek_api_key'),
+                'Content-Type' => 'application/json',
+            ]
+        ]);
+    }
 
-       public function generateCode($prompt)
-       {
-           $response = $this->client->post('generate', [
-               'json' => [
-                   'prompt' => $prompt,
-               ],
-           ]);
+    public function generateCode(string $prompt): string
+    {
+        $response = $this->client->post('/v1/generate', [
+            'json' => ['prompt' => $prompt]
+        ]);
 
-           return json_decode($response->getBody(), true);
-       }
-   }
+        return json_decode($response->getBody(), true)['code'];
+    }
+}
