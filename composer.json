@@ -3,14 +3,16 @@
     "description": "AI-powered Laravel component generator",
     "type": "library",
     "require": {
-        "php": "^8.1",
-        "laravel/framework": "^9.0|^10.0|^11.0",
-        "guzzlehttp/guzzle": "^7.0"
+        "php": "^8.2",
+        "laravel/framework": "^10.0|^11.0",
+        "guzzlehttp/guzzle": "^7.7",
+        "ext-json": "*"
     },
     "require-dev": {
-        "pestphp/pest": "^2.0",
+        "pestphp/pest": "^2.34",
         "pestphp/pest-plugin-laravel": "^2.0",
-        "orchestra/testbench": "^6.0|^7.0|^8.0"
+        "orchestra/testbench": "^8.0|^9.0",
+        "mockery/mockery": "^1.6"
     },
     "autoload": {
         "psr-4": {
@@ -26,7 +28,8 @@
         "laravel": {
             "providers": [
                 "Hussainabuhajjaj\\Codebot\\CodebotServiceProvider"
-            ]
+            ],
+            "dont-discover": []
         }
     },
     "scripts": {
